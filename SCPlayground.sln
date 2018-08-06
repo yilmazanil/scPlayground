@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2026
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{6CE3E949-B9C5-48CC-A422-51778E13ADB7}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Foundation", "Foundation", "{BA1296E1-A33B-40B1-9433-FCC642F4DAEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCPlayground.WebUI", "Presentation\SCPlayground.WebUI\SCPlayground.WebUI.csproj", "{91505EA9-E172-4688-82AF-ADBAE1008C48}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Feature", "Feature", "{92818472-45C6-4BB3-80E7-B7314EC406CF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project", "Project", "{37E97525-C8DB-4B1E-B6BD-072909711356}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCPlayground.WebUI", "Project\SCPlayground.WebUI\SCPlayground.WebUI.csproj", "{91505EA9-E172-4688-82AF-ADBAE1008C48}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,7 +26,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{91505EA9-E172-4688-82AF-ADBAE1008C48} = {6CE3E949-B9C5-48CC-A422-51778E13ADB7}
+		{91505EA9-E172-4688-82AF-ADBAE1008C48} = {37E97525-C8DB-4B1E-B6BD-072909711356}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1B98E3E8-68E6-4929-838E-A5E6DB30B7D4}

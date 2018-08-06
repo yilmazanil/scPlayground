@@ -332,3 +332,4 @@ Presentation/SCPlayground.WebUI/Web.config
 Presentation/SCPlayground.WebUI/Web.Debug.config
 Presentation/SCPlayground.WebUI/Web.Release.config
 Presentation/SCPlayground.WebUI/Views/web.config
+Project/SCPlayground.WebUI/Web.config

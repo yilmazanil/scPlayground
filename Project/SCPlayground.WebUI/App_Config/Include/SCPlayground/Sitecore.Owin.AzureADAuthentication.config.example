@@ -16,7 +16,7 @@
     <pipelines>
       <owin.identityProviders>
         <!-- Uygulama içerisinde oluşturulmuş olan yetkilendirme sınıfı assembly bilgisi -->
-        <processor type="SCPlayground.WebUI.Pipelines.AzureADIdentityProviderProcessor, SitecoreTest.WebUI" resolve="true" />
+        <processor type="SCPlayground.WebUI.Project.Pipelines.AzureADIdentityProviderProcessor, SCPlayground.WebUI" resolve="true" />
       </owin.identityProviders>
     </pipelines>
     <federatedAuthentication>

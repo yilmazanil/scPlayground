@@ -9,7 +9,7 @@ using Sitecore.Owin.Authentication.Services;
 using System.Globalization;
 using System.Threading.Tasks;
 
-namespace SCPlayground.WebUI.Pipelines
+namespace SCPlayground.WebUI.Project.Pipelines
 {
     public class AzureADIdentityProviderProcessor : IdentityProvidersProcessor
     {
