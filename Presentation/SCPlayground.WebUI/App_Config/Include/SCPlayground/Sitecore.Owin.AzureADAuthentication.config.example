@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns:patch="http://www.sitecore.net/xmlconfig/" xmlns:role="http://www.sitecore.net/xmlconfig/role/">
+  <sitecore role:require="Standalone or ContentDelivery or ContentManagement">
+    <settings>
+      <!-- Azure AD ayarları -->
+      <!-- Azure konfigürasyon adımında not alınan Application ID bilgisi -->
+      <setting name="ClientId" value="7f35e547-0c73-4c06-be45-faac354568bf" />
+      <setting name="AADInstance" value="https://login.microsoftonline.com/{0}" />
+      <!-- Kullanılacak Active Directory domain bilgisi -->
+      <setting name="Tenant" value="something.onmicrosoft.com" />
+      <!-- Yetkilendirme yapılacak sitecore site adresi + /login-->
+      <setting name="PostLogoutRedirectURI" value="https://sitecorexmtest.azurewebsites.net/login" />
+      <!-- Yetkilendirme yapılacak sitecore site adresi + /sitecore-->
+      <setting name="RedirectURI" value="https://sitecorexmtest.azurewebsites.net/logins/sitecore" />
+    </settings>
+    <pipelines>
+      <owin.identityProviders>
+        <!-- Uygulama içerisinde oluşturulmuş olan yetkilendirme sınıfı assembly bilgisi -->
+        <processor type="SCPlayground.WebUI.Pipelines.AzureADIdentityProviderProcessor, SitecoreTest.WebUI" resolve="true" />
+      </owin.identityProviders>
+    </pipelines>
+    <federatedAuthentication>
+      <identityProviders hin="list:AddIdentityProvider">
+        <identityProvider id="xp0.sc.azureAD" type="Sitecore.Owin.Authentication.Configuration.DefaultIdentityProvider, Sitecore.Owin.Authentication">
+          <param desc="name">$(id)</param>
+          <param desc="domainManager" type="Sitecore.Abstractions.BaseDomainManager" resolve="true" />
+          <caption>Sign-in with Azure Active Directory</caption>
+          <domain>sitecore</domain>
+          <icon>/sitecore/shell/themes/standard/Images/24x24/msazure.png</icon>
+          <transformations hint="list:AddTransformation">
+            <!-- Idp (Identity Provider) Claim olması gerekiyor, mevuctta sabit -->
+            <transformation name="Idp Claim" ref="federatedAuthentication/sharedTransformations/setIdpClaim" />
+            <!-- Azure üzerindeki grubu Sitecore üzerindeki grup ile eşleştirmek için konfigürasyon. 
+                 AddSource olan Azure üzerinden oluşturulan grubun object idsi, AddTarget hangi role mapleneceği -->
+            <transformation name="devRole" type="Sitecore.Owin.Authentication.Services.DefaultTransformation, Sitecore.Owin.Authentication">
+              <sources hint="raw:AddSource">
+                <claim name="groups" value="acf7aaa0-ed0e-4692-a9b5-66ef322660ff" />
+              </sources>
+              <targets hint="raw:AddTarget">
+                <claim name="http://schemas.microsoft.com/ws/2008/06/identity/claims/role" value="Sitecore\Author" />
+              </targets>
+              <keepSource>true</keepSource>
+            </transformation>
+          </transformations>
+        </identityProvider>
+      </identityProviders>
+      <!-- Sitecore kullanıcı bilgilerine atanacak claim bilgileri -->
+      <propertyInitializer type="Sitecore.Owin.Authentication.Services.PropertyInitializer, Sitecore.Owin.Authentication">
+        <maps hint="list">
+          <map name="email claim" type="Sitecore.Owin.Authentication.Services.DefaultClaimToPropertyMapper, Sitecore.Owin.Authentication">
+            <data hint="raw:AddData">
+              <!--claim adı-->
+              <source name="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress" />
+              <!--özellik adı-->
+              <target name="Email" />
+            </data>
+          </map>
+          <map name="Name claim" type="Sitecore.Owin.Authentication.Services.DefaultClaimToPropertyMapper, Sitecore.Owin.Authentication">
+            <data hint="raw:AddData">
+              <!--claim adı-->
+              <source name="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname" />
+              <!--özellik adı-->
+              <target name="Name" />
+            </data>
+          </map>
+        </maps>
+      </propertyInitializer>
+      <identityProvidersPerSites>
+        <mapEntry name="all" type="Sitecore.Owin.Authentication.Collections.IdentityProvidersPerSitesMapEntry, Sitecore.Owin.Authentication">
+          <sites hint="list">
+            <site>shell</site>
+            <site>login</site>
+            <site>admin</site>
+            <site>service</site>
+            <site>modules_shell</site>
+            <site>modules_website</site>
+            <site>website</site>
+            <site>scheduler</site>
+            <site>system</site>
+            <site>publisher</site>
+          </sites>
+          <!-- Registered identity providers for above providers -->
+          <identityProviders hint="list:AddIdentityProvider">
+            <identityProvider ref="federatedAuthentication/identityProviders/identityProvider[@id='xp0.sc.azureAD']" />
+          </identityProviders>
+          <!-- ExternalUserBuilder is what creates a user with customusername in Sitecore and assigns roles based on claim transformation configured above -->
+          <externalUserBuilder type="Sitecore.Owin.Authentication.Services.DefaultExternalUserBuilder, Sitecore.Owin.Authentication">
+            <param desc="isPersistentUser">true</param>
+          </externalUserBuilder>
+        </mapEntry>
+      </identityProvidersPerSites>
+    </federatedAuthentication>
+  </sitecore>
+</configuration>
